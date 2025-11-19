@@ -1,0 +1,24 @@
+setcps(140/60/4); 
+
+// 1. The Kick (The Pulse)
+const drums = s("bd").n(5)
+  .stack(s("hh").n(12).off(0.5, x=>x))
+
+// 2. The "Ducked" Bassline
+const bass = note("<0 4 0 9 7>*16")
+  .scale("g:minor")
+  .trans(-12) 
+  .s("sawtooth")
+  .lpf(2000).lpenv(8).lpd(0.15).lps(0.2) 
+  // --- THE FAKE SIDECHAIN TRICK ---
+  // We multiply the gain by a pattern that is 0 (silent) on the beat
+  // and 1 (loud) on the off-beats.
+  .gain(
+    "0 1 1 1".fast(4) 
+  )
+
+// Stack them together
+stack(
+  bass,
+  drums
+)
